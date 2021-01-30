@@ -41,20 +41,23 @@ class Packet:
 class Bin:
     def __init__(self):
         self.time = 0
+        self.time1 = ''
         self.count = 0
         self.size = 0
         self.protos = set()
 
     def info(self):
-        return (str(self.time), str(self.count), str(self.size), str(self.protos))
+        return (self.time1, str(self.count), str(self.size), str(self.protos))
     
     def update(self, p):
         ret = None
         if self.time == 0:
             self.time = p.time
+            self.time1 = p.time1
         elif p.time - self.time < threshold:
             ret = self.info()
             self.time = p.time
+            self.time1 = p.time1
             self.count = 0
             self.size = 0
             self.protos = set()
