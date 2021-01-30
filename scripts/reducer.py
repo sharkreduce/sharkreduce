@@ -13,7 +13,7 @@ class Packet:
     """
     Representation of a single packet as parsed from a tshark TSV export line.
     """
-    
+
     def __init__(self, line):
         fields = line.split('\t')
         self.time1 = fields[0]
@@ -128,13 +128,13 @@ if __name__ == "__main__":
             macs.add(mac)
 
     def get_device(of_packet):
+        # TODO: Device name translation
         macs = set()
 
         put(macs, of_packet.ethsrc)
         put(macs, of_packet.ethdst)
 
         if (not macs) or (len(macs) > 1):
-            print("local traffic")
             return None
         return macs.pop()
 
@@ -148,8 +148,7 @@ if __name__ == "__main__":
     
     last = 0
 
-    line = in_file.readline()
-    while line:
+    for line in in_file:
         p = Packet(line)
         finished_bin = update_stats(p)
         if finished_bin:
@@ -167,10 +166,8 @@ if __name__ == "__main__":
                     for r in removals:
                         stat.bins.pop(r)
                 last = p.time
-        line = in_file.readline()
 
     for device, stat in stats.items():
-        print(device)
         for fivetuple, packet_bin in stat.bins.items():
             out_file.write('\t'.join((device,) + fivetuple + packet_bin.info()) + '\n')
 
