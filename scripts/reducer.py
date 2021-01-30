@@ -10,6 +10,10 @@ MAX_BIN_AGE = 1_000_000
 
 
 class Packet:
+    """
+    Representation of a single packet as parsed from a tshark TSV export line.
+    """
+    
     def __init__(self, line):
         fields = line.split('\t')
         self.time1 = fields[0]
@@ -43,6 +47,10 @@ class Packet:
 
 
 class Bin:
+    """
+    Accumulates information for multiple packets within a time interval.
+    """
+
     def __init__(self):
         self.time = 0
         self.time1 = ''
@@ -76,6 +84,10 @@ class Bin:
 
 
 class Stat:
+    """
+    Tracks all Bins that are currently in progress for a single device.
+    """
+
     def __init__(self):
         self.bins = defaultdict(Bin)
 
