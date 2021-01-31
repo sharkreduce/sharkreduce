@@ -5,8 +5,7 @@ Utility to convert wireshark captures to useful datasets.
 ## Installation
 
 ```bash
-cd tshark-capture-analysis
-pip install -e .
+pip install sharkreduce
 ```
 
 ## Steps to create reduced dataset
