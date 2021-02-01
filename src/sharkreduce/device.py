@@ -39,7 +39,7 @@ class DeviceCollection:
         self.yaml_path = yaml_path
         if os.path.exists(yaml_path):
             with open(yaml_path, 'r') as yaml_file:
-                yaml_content = yaml.load(yaml_file)
+                yaml_content = yaml.load(yaml_file, Loader=yaml.FullLoader)
                 if "devices" in yaml_content:
                     for device_name, mac_ids in yaml_content["devices"].items():
                         device = Device(device_name)

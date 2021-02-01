@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 from collections import defaultdict
 
+from progress.bar import Bar
 from . import flow
 from .packet import Packet
 from .device import DeviceCollection
@@ -35,20 +36,31 @@ devices: DeviceCollection = DeviceCollection(args.names)
 activity: ActivityIntervals = ActivityIntervals(args.activity_file)
 
 if args.init_activity:
+    print(f"Initialising activity file {args.activity_file}...")
     activity.init_activity_file(args.destination)
 else:
+    line_count = 0
+    with open(args.source, 'r') as in_file:
+        for line in in_file:
+            line_count += 1
+
     with open(args.source, 'r') as in_file:
         with open(args.destination, 'w') as out_file:
 
+            progress_bar = Bar("Reducing", max=line_count, check_tty=False)
             flow.Bin.print_headers(out_file)
 
-            for line in in_file:
-                packet = Packet(line)
+            for i, line in enumerate(in_file):
+                packet = Packet(line, i)
                 device = devices[packet]
                 if not device:
                     continue
                 devices.flush_bins(out_file, time=packet.time)
                 device.update(packet, out_file, activity)
+                if not (i % 1000):
+                    progress_bar.next(n=1000)
 
+            progress_bar.goto(line_count)
+            progress_bar.finish()
             devices.flush_bins(out_file, force=True)
             devices.store()

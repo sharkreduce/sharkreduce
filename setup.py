@@ -16,7 +16,7 @@ packages = setuptools.find_packages("src")
 
 setuptools.setup(
     name="sharkreduce",
-    version="0.1.0",
+    version="0.2.0",
     author="Johannes Abel, Joseph Birkner, Tom Mirwald",
     description="Convenience functionality to annotate and reduce wireshark captures.",
     long_description=long_description,

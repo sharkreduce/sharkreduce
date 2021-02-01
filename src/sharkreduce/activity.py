@@ -99,7 +99,7 @@ class ActivityIntervals:
 
     def parse(self):
         with open(self.activity_file_path, 'r') as activity_file:
-            content = yaml.load(activity_file)
+            content = yaml.load(activity_file, Loader=yaml.FullLoader)
         self.intervals = [
             ActivityInterval.from_dict(interval_dict)
             for interval_dict in content

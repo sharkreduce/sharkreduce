@@ -4,8 +4,11 @@ class Packet:
     Representation of a single packet as parsed from a tshark TSV export line.
     """
 
-    def __init__(self, line):
+    def __init__(self, line, line_number):
         fields = line.split('\t')
+        if len(fields) < 13:
+            print(f"[ERROR] Not enough fields in line {line_number} to read packet: {line}")
+            fields = "0" * 13
         self.time1 = fields[0]
         self.ethsrc = fields[1]
         self.ethdst = fields[2]
